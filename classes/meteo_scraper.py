@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 class MeteoScraper:
+    #Todo @IrisAmrein change variable names to reflect their content better (e.g. day_delay, delay)
     """
     instances a Chrome Driver configured to scrape the page www.srf.ch/meteo
     """
@@ -22,7 +23,7 @@ class MeteoScraper:
             drivopt.add_argument('headless')
         self.driver = webdriver.Chrome(options = drivopt)
 
-    def find_weather(self,plz, day_index=0):
+    def find_weather(self,loc, day_index=0):
         """
         launch webdriver and search for weather information for plz
         :plz: int/str - PLZ or Name of location to search weather for
@@ -32,7 +33,7 @@ class MeteoScraper:
         """
         self.driver.get("https://www.srf.ch/meteo")
         search = self.driver.find_element(By.ID, "search__input")
-        search.send_keys(plz)
+        search.send_keys(loc)
 
         optlist = self.find_element_by_class("search-result__link")
         optlist[0].click()
@@ -43,6 +44,8 @@ class MeteoScraper:
         weather = day.find_element(By.TAG_NAME, "img").get_attribute("alt")
 
         self.driver.quit()
+
+        #todo #7 Transform day_index into human understandable text (0 = "heute", 1= "morgen", etc.)
 
         text = "In "+location+" ist das Wetter "+weather+". Tagsüber wird es "+high+" Grad. Nachts wird es "+low+" Grad."
         return text
@@ -99,12 +102,10 @@ class MeteoScraper:
         hightmp = high.find_element(By.TAG_NAME, "span").get_attribute("innerHTML")
         return lowtmp, hightmp
 
-
-# Function that will be implemented in 
-plz = input("Für welche PLZ möchtest du das Wetter wissen? ")
+loc_input = input("Für welche PLZ möchtest du das Wetter wissen? ")
 delay = input("Für wie viele Tage von heute aus?")
 
 scraper = MeteoScraper()
-weather_forecast = scraper.find_weather(plz, int(delay))
+weather_forecast = scraper.find_weather(loc_input, int(delay))
 
 print(weather_forecast)
