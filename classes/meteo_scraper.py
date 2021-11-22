@@ -2,6 +2,7 @@
 instance of scraper configured to scrape the page www.srf.ch/meteo
 """
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -18,10 +19,11 @@ class MeteoScraper:
 
         :headless: boolean - default = False - should the browser be shown
         """
+        PATH = './chromedriver'
         drivopt = webdriver.ChromeOptions()
         if headless:
             drivopt.add_argument('headless')
-        self.driver = webdriver.Chrome(options = drivopt)
+        self.driver = webdriver.Chrome(PATH, options = drivopt)
 
     def find_weather(self,loc, day_index=0):
         """

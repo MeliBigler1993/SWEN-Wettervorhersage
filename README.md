@@ -1,6 +1,10 @@
 # SWEN-Wettervorhersage
 Das Projekt erlaubt es dem User / der Userin eine Wettervorhersage für einen gewünschten Ort (und evtl. eine gewünschte Zeitdauer) zu erhalten. Die Funktion wird über ein GUI angeboten. 
 
+## Installationsanleitung
+Installiere die folgenden Pakete über pip: 
+* Selenium `pip install selenium`
+
 ## Projekt Ziele
 * Der User soll Optionen erhalten über wie viele Tage Vorhersage
 * Code soll schlussendlich auf einer Mobile App laufen (inkl. Speech Recognition & Text to Speech) 

@@ -1,2 +1,5 @@
 #Pylint
 .vscode/
+
+#Mac Files
+.DS_Store
