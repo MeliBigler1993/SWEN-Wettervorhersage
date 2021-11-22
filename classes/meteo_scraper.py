@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from datetime import date
 
 
 class MeteoScraper:
@@ -45,11 +46,11 @@ class MeteoScraper:
         high, low = self.get_temperature(day)
         weather = day.find_element(By.TAG_NAME, "img").get_attribute("alt")
 
+        day_text = self.get_reldate(day_index)
+
         self.driver.quit()
 
-        #todo #7 Transform day_index into human understandable text (0 = "heute", 1= "morgen", etc.)
-
-        text = "In "+location+" ist das Wetter "+weather+". Tagsüber wird es "+high+" Grad. Nachts wird es "+low+" Grad."
+        text = "In "+location+" ist das Wetter "+day_text+" "+weather+". Tagsüber wird es "+high+" Grad. Nachts wird es "+low+" Grad."
         return text
 
     def find_element_by_class(self,classname):
@@ -103,6 +104,25 @@ class MeteoScraper:
         high = day.find_element(By.CLASS_NAME, "weather-day__tmp--hi")
         hightmp = high.find_element(By.TAG_NAME, "span").get_attribute("innerHTML")
         return lowtmp, hightmp
+
+    def get_reldate(self,delay):
+        if(int(delay) == 0):
+            return "heute"
+        elif(int(delay) == 1):
+            return "morgen"
+        else:
+            today = str(date.today().weekday())
+            weekday = int(today) + int(delay)
+            word = {
+                0: 'Montag',
+                1: 'Dienstag',
+                2: 'Mittwoch',
+                3: 'Donnerstag',
+                4: 'Freitag',
+                5: 'Samstag',
+                6: 'Sonntag',
+            }[weekday]
+            return "am " + word
 
 loc_input = input("Für welche PLZ möchtest du das Wetter wissen? ")
 delay = input("Für wie viele Tage von heute aus?")
