@@ -45,7 +45,7 @@ class MeteoScraper:
         location = self.get_location()
 
         day_element = self.get_day_element(day_index)
-        high, low = self.get_temperature(day_element)
+        low, high = self.get_temperature(day_element)
         weather = day_element.find_element(By.TAG_NAME, "img").get_attribute("alt")
 
         day_text = self.get_reldate(day_index)
