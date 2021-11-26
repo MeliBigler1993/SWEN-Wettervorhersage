@@ -34,14 +34,8 @@ class MeteoScraper:
 
         :return: str (text) - a text that describes the weather and temp at the given day 
         """
-        self.driver.get("https://www.srf.ch/meteo")
-        search = self.driver.find_element(By.ID, "search__input")
-        search.send_keys(loc)
-
-        #select the first element of the searchbox dropdown
-        optlist = self.find_element_by_class("search-result__link")
-        optlist[0].click()
-        location = self.get_location()
+        self.nav_to_loc_meteo_page(loc)
+        location = self.get_location_name()
 
         day_element = self.get_day_element(day_index)
         low, high = self.get_temperature(day_element)
@@ -58,6 +52,15 @@ class MeteoScraper:
     ### HELPER FUNCTIONS ###
     ########################
 
+    def nav_to_loc_meteo_page(self, loc):
+        self.driver.get("https://www.srf.ch/meteo")
+        search = self.driver.find_element(By.ID, "search__input")
+        search.send_keys(loc)
+
+        #select the first element of the searchbox dropdown
+        optlist = self.find_element_by_class("search-result__link")
+        optlist[0].click()
+    
     def find_element_by_class(self,classname):
         """
         finds and returns all elements with a certain classname.
@@ -78,7 +81,7 @@ class MeteoScraper:
             self.driver.quit()
             return False
 
-    def get_location(self):
+    def get_location_name(self):
         """
         gets location from web
 
@@ -142,10 +145,10 @@ class MeteoScraper:
             word = weekdays[weekday]
             return "am " + word
 
-# loc_input = input("Für welche PLZ möchtest du das Wetter wissen? ")
-# delay = input("Für wie viele Tage von heute aus?")
+loc_input = input("Für welche PLZ möchtest du das Wetter wissen? ")
+delay = input("Für wie viele Tage von heute aus?")
 
-# scraper = MeteoScraper()
-# weather_forecast = scraper.find_weather(loc_input, int(delay))
+scraper = MeteoScraper()
+weather_forecast = scraper.find_weather(loc_input, int(delay))
 
-# print(weather_forecast)
+print(weather_forecast)
