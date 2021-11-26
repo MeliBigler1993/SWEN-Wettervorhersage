@@ -1,12 +1,12 @@
 """
 instance of scraper configured to scrape the page www.srf.ch/meteo
 """
+# to import in another file call from .classes.meteo_scraper import ... 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from datetime import date
-
 
 class MeteoScraper:
     #Todo @IrisAmrein change variable names to reflect their content better (e.g. day_delay, delay)
@@ -19,11 +19,10 @@ class MeteoScraper:
 
         :headless: boolean  - should the browser be shown | default = False
         """
-        PATH = './chromedriver'
         drivopt = webdriver.ChromeOptions()
         if headless:
             drivopt.add_argument('headless')
-        self.driver = webdriver.Chrome(PATH, options = drivopt)
+        self.driver = webdriver.Chrome(options = drivopt)
 
     # add a check to ask for input if day_index is higher than 6
     # catch errors if plz / location is not available
@@ -55,11 +54,14 @@ class MeteoScraper:
         text = "In "+location+" ist das Wetter "+day_text+" "+weather+". Tagsüber wird es "+high+" Grad. Nachts wird es "+low+" Grad."
         return text
 
+    ########################
     ### HELPER FUNCTIONS ###
+    ########################
 
     def find_element_by_class(self,classname):
         """
         finds and returns all elements with a certain classname.
+        Makes sure to wait to get the element until the element has loaded.
         :classname: str - classname of desired elements
 
         :return: list - all elements with the given classname
@@ -120,6 +122,7 @@ class MeteoScraper:
 
         :return: (day_text) - a string that indicates which day is targeted ("heute", "morgen", "am Montag", ...)
         """
+        #define a dict of weekdays to use for identification later
         weekdays = {
                 0: 'Montag',
                 1: 'Dienstag',
@@ -139,10 +142,10 @@ class MeteoScraper:
             word = weekdays[weekday]
             return "am " + word
 
-loc_input = input("Für welche PLZ möchtest du das Wetter wissen? ")
-delay = input("Für wie viele Tage von heute aus?")
+# loc_input = input("Für welche PLZ möchtest du das Wetter wissen? ")
+# delay = input("Für wie viele Tage von heute aus?")
 
-scraper = MeteoScraper()
-weather_forecast = scraper.find_weather(loc_input, int(delay))
+# scraper = MeteoScraper()
+# weather_forecast = scraper.find_weather(loc_input, int(delay))
 
-print(weather_forecast)
+# print(weather_forecast)
