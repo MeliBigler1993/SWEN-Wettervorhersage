@@ -2,11 +2,16 @@
 instance of scraper configured to scrape the page www.srf.ch/meteo
 """
 # to import in another file call from .classes.meteo_scraper import ...
+
+import sys
 from datetime import date
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+
+
 
 class MeteoScraper:
     #Todo @IrisAmrein change variable names to reflect their content better (e.g. day_delay, delay)
@@ -33,8 +38,7 @@ class MeteoScraper:
             self.driver.quit()
             return "Please enter a valid day index (0 - 6) and run the script again."
 
-        if self.nav_to_loc_meteo_page(loc) == False:
-            return
+        self.nav_to_loc_meteo_page(loc)
         location = self.get_location_name()
 
         day_element = self.get_day_element(day_index)
@@ -64,14 +68,13 @@ class MeteoScraper:
 
         optlist = self.find_elements_by_class("search-result__link")
 
-        #raise exception and quit the script if there are no search results for the Location given
+        #select the first element of the searchbox dropdown if there are results, else exit script
         if optlist == False:
             self.driver.quit()
-            raise Exception("Invalid location. Please try again.")
-
-        #select the first element of the searchbox dropdown.
-        optlist[0].click()
-
+            sys.exit()
+        else:
+            optlist[0].click()
+        
     def find_elements_by_class(self,classname):
         """
         finds and returns all elements with a certain classname.
@@ -80,15 +83,16 @@ class MeteoScraper:
 
         :return: list - all elements with the given classname
         """
+
         try:
             WebDriverWait(self.driver,3).until(
-                EC.presence_of_all_elements_located((By.CLASS_NAME,classname))
+                EC.presence_of_all_elements_located((By.CLASS_NAME,classname)),
             )
             result = self.driver.find_elements(By.CLASS_NAME, classname)
             elements = result
             return elements
         except:
-            print("Could not find any elements with the classname", classname)
+            print("No results for the given location. Please try again")
             return False
 
     def get_location_name(self):
@@ -154,12 +158,12 @@ class MeteoScraper:
             word = weekdays[weekday]
             return "am " + word
 
-#INFO: Wenn PyQt Ready muss alles unter dieser Linie gelöscht werden. 
+#INFO: Wenn PyQt Ready muss alles unter dieser Linie gelöscht werden.
 
-loc_input = input("Für welche PLZ möchtest du das Wetter wissen? ")
-delay = input("Für wie viele Tage von heute aus?")
+# loc_input = input("Für welche PLZ möchtest du das Wetter wissen? ")
+# delay = input("Für wie viele Tage von heute aus?")
 
-scraper = MeteoScraper()
-weather_forecast = scraper.find_weather(loc_input, int(delay))
+# scraper = MeteoScraper()
+# weather_forecast = scraper.find_weather(loc_input, int(delay))
 
-print(weather_forecast)
+# print(weather_forecast)
