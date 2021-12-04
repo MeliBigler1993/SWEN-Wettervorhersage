@@ -9,7 +9,6 @@ Installiere die folgenden Pakete über pip:
 * Speech Recognition `pip install SpeechRecognition`: https://pypi.org/project/SpeechRecognition/
 * Chromedriver: https://chromedriver.chromium.org/downloads
 
-
 ## Projekt Ziele
 * User soll eine Wettervorhersage für einen von ihm/ihr bestimmten Ort und Tag erhalten
 * User soll wählen können, ob die Ein-/Ausgabe über Tastatur oder Sprache geschieht 
