@@ -13,7 +13,7 @@ class MeteoScraper:
     """
     instances a Chrome Driver configured to scrape the page www.srf.ch/meteo
     """
-    def __init__(self, headless=False) -> None:
+    def __init__(self, headless=False):
         """
         initialize new driver
 
@@ -24,7 +24,6 @@ class MeteoScraper:
             drivopt.add_argument('headless')
         self.driver = webdriver.Chrome(options = drivopt)
 
-    # add a check to ask for input if day_index is higher than 6
     # catch errors if plz / location is not available
     def find_weather(self,loc, day_index=0):
         """
@@ -32,8 +31,11 @@ class MeteoScraper:
         :plz: str - PLZ or Name of location to search weather for
         :day_index: int - no of days from today for day that weather should be forecasted
 
-        :return: str (text) - a text that describes the weather and temp at the given day 
+        :return: str (text) - a text that describes the weather and temp at the given day
         """
+        if(day_index>6):
+            return "Please enter a valid day index (0 - 6) and run the script again."
+
         self.nav_to_loc_meteo_page(loc)
         location = self.get_location_name()
 
