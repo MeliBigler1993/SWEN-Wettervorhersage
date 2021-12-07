@@ -3,6 +3,7 @@ Das Projekt erlaubt es dem User / der Userin eine Wettervorhersage für einen ge
 
 ## Installationsanleitung / Dependencies
 Installiere die folgenden Pakete über pip: 
+* PyQt5 `pip install PyQt5`: https://pypi.org/project/PyQt5/
 * Selenium `pip install selenium`: https://pypi.org/project/selenium/ 
 * Text-to-speech library `pip install pyttsx3`: https://pypi.org/project/pyttsx3/
 * PyAudio (to use Mic as VoiceInput) `pip install PyAudio`: https://pypi.org/project/PyAudio/ 

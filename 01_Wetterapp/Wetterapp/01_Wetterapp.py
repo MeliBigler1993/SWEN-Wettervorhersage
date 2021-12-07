@@ -1,7 +1,6 @@
 #Setting Up
 import sys
-from PyQt5 import QtWidgets
-from PyQt5.QtGui import QFont, QIcon, QKeyEvent
+from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QToolTip, QLabel, QLineEdit, QGridLayout, QComboBox, QTabWidget
 
 
@@ -10,58 +9,23 @@ from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QTo
 
 
 #Button erstellen (Objektorientiert)
-class Fenster (QWidget): 
+class Fenster (QWidget):
     def __init__(self):
         super().__init__()
-        self.initMe()
+        self.init_me()
         self.setWindowTitle("Wetterapplikation")
-        self.setWindowIcon(QIcon("wetter.png"))#Icon funktioniert noch nicht
+        self.setWindowIcon(QIcon("./wetter.png"))#Icon funktioniert noch nicht
+        self.setGeometry(50,50,200,200)
         self.show()
 
-    def initMe(self):
+    def init_me(self):
         #Layout aufsetzen
         grid = QGridLayout()
         self.setLayout(grid)
 
-        #Label (Text) erstellen 
+        #Tabs erstellen und ins Layout einfügen
         tabs = TabWidget(self)
         grid.addWidget(tabs,1,1)
-
-
-        
-
-    #Brauchen wir nicht, da wir Tabs und Labels nutzen weden (GridLayout funktioniert nicht in Window sondern in Widget)
-        # #Toolbar erstellen
-        # self.statusBar(). showMessage("Wir zeigen Ihnen das Wetter von Heute und der nächsten 7 Tage")
-
-        # #Menubar erstellen 
-        # menubar = self.menuBar()
-        # audio = menubar.addMenu("&Audioabfrage")
-        # text = menubar.addMenu("&Textsuche")
-
-        #Fenster anzeigen_TitelSetzen
-        # self.show()
-        self.setGeometry(50,50,200,200)
-        # self.setWindowTitle("Wetterapplikation")
-        self.setWindowIcon(QIcon("wetter.png"))#Icon funktioniert noch nicht
-
-    def gedrueckt(self, text):
-        print ("Button getätigt")
-    
-    def aufgenommen(self):
-        print("Eine Audioaufnahme wurde hinzugefügt")
-    
-    def abgeschickt(self):
-        print("Audioaufnahme übermittelt")
-
-    def abhoeren(self):
-        print("Audioantwort abhören")
-
-
-    #Benutzerdefinierter Event erstellen - GUI beenden wenn w gedrückt wird. 
-    def keyPressEvent(self, QKeyEvent):
-        if QKeyEvent.key() == Qt.Key_W:
-            self.close()
 
 class TabWidget(QWidget):
     def __init__(self,parent):
@@ -81,6 +45,7 @@ class TabWidget(QWidget):
         self.plz_label = QLabel()
         self.plz_label.setText("Geben Sie die gewünschte PLZ oder Ort an")
         tab1_layout.addWidget(self.plz_label,1,1)
+
         #Tab 1: Line Edit -PLZ eingeben
         self.plz =QLineEdit(self)
         tab1_layout.addWidget(self.plz,2,1)
@@ -96,7 +61,7 @@ class TabWidget(QWidget):
         self.options.addItem("Morgen")
         tab1_layout.addWidget(self.options,5,1)
 
-        #Tab 1: ToolTip und Absende- Button erstellen 
+        #Tab 1: ToolTip und Absende- Button erstellen
         QToolTip.setFont(QFont("Arial", 12))
         senden = QPushButton("Absenden", self)
         tab1_layout.addWidget(senden,6,1)
@@ -126,12 +91,12 @@ class TabWidget(QWidget):
         tab2_layout.addWidget(voice_output,4,1)
         voice_output.clicked.connect(self.abhoeren)
 
-    def gedrueckt(self, text):
+    def gedrueckt(self):
         print ("Button getätigt")
-    
+
     def aufgenommen(self):
         print("Eine Audioaufnahme wurde hinzugefügt")
-    
+
     def abgeschickt(self):
         print("Audioaufnahme übermittelt")
 
@@ -145,14 +110,7 @@ w = Fenster()
 sys.exit(app.exec_())
 
 #Backlog
-#VERSUCH -Combobox Wochentag auswählen 
-        #w = QComboBox(self)
-        #w.move(80,50)
-        #w.addItem("Montag")
-        #w.self.addItem("Dienstag")
-        #self.addItem ("Mittwoch")
-
-        #zurueck = QPushButton("Zurück", self)
-        #zurueck.move(50,900)
-        #zurueck.setToolTip("Drücken Sie hier, um <b>einen Schritt</b> zurück zu gehen")
-        #zurueck.clicked.connect(self.gedrueckt)
+    #zurueck = QPushButton("Zurück", self)
+    #zurueck.move(50,900)
+    #zurueck.setToolTip("Drücken Sie hier, um <b>einen Schritt</b> zurück zu gehen")
+    #zurueck.clicked.connect(self.gedrueckt)
