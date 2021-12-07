@@ -5,6 +5,8 @@ This module defines and sets up the GUI
 import sys
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QToolTip, QLabel, QLineEdit, QGridLayout, QComboBox, QTabWidget
+from classes.meteo_scraper import MeteoScraper
+from classes.speech_rec import Speaker
 
 #Button erstellen (Objektorientiert)
 class Fenster (QWidget):
@@ -73,7 +75,11 @@ class TabWidget(QWidget):
         senden = QPushButton("Absenden", self)
         tab1_layout.addWidget(senden,6,1)
         senden.setToolTip("Drücken Sie hier, um die <b>Anfrage</b> zu versenden")
-        senden.clicked.connect(self.gedrueckt)
+        senden.clicked.connect(lambda: self.gedrueckt(self.plz.text(), self.options.currentIndex()))
+
+        #Tab 1: Resultat
+        self.resultat = QLabel()
+        tab1_layout.addWidget(self.resultat,7,1)
 
         #Setup Tab2 "Audio"
         tab2_layout = QGridLayout()
@@ -85,42 +91,42 @@ class TabWidget(QWidget):
         #Tab2: Audioaufnahme
         rec_button = QPushButton("Audioaufnahme starten", self)
         tab2_layout.addWidget(rec_button,2,1)
-        rec_button.pressed.connect(self.aufgenommen)
-        rec_button.released.connect(self.abgeschickt)
+        rec_button.clicked.connect(self.aufgenommen)
 
         #Tab2: Display Aufnahme
-        aufnahme = QLabel()
-        aufnahme.setText("Sie sagten: ")
-        tab2_layout.addWidget(aufnahme,3,1)
+        self.aufnahme = QLabel()
+        self.aufnahme.setText("Sie sagten: ")
+        tab2_layout.addWidget(self.aufnahme,3,1)
 
         #Tab2: Antwort hören
         voice_output = QPushButton("Audioantwort abhoeren",self)
         tab2_layout.addWidget(voice_output,4,1)
         voice_output.clicked.connect(self.abhoeren)
 
-    def gedrueckt(self):
+    def gedrueckt(self, plz, day):
         """
         gets called by button "Absenden". [...]
         """
-        print ("Button getätigt")
+        scrape = MeteoScraper()
+        self.weather = scrape.find_weather(plz, day)
+        self.resultat.setText(self.weather)
+
 
     def aufgenommen(self):
         """
         gets called by button "Aufnehmen". [...]
         """
-        print("Eine Audioaufnahme wurde hinzugefügt")
-
-    def abgeschickt(self):
-        """
-        gets called by button "Aufnehmen". [...]
-        """
-        print("Audioaufnahme übermittelt")
+        self.speaker = Speaker()
+        self.plz = self.speaker.listen_for_input()
+        self.aufnahme.setText("Sie sagten: "+self.plz)
 
     def abhoeren(self):
         """
         gets called by button "Abhören". [...]
         """
-        print("Audioantwort abhören")
+        scrape = MeteoScraper()
+        self.weather = scrape.find_weather(self.plz)
+        self.speaker.speak(self.weather)
 
 
 app = QApplication (sys.argv)

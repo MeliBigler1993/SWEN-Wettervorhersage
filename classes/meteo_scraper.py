@@ -49,7 +49,7 @@ class MeteoScraper:
 
         self.driver.quit()
 
-        text = "In "+location+" ist das Wetter "+day_text+" "+weather+". Tagsüber wird es "+high+" Grad. Nachts wird es "+low+" Grad."
+        text = "In "+location+" ist das Wetter "+day_text+" "+weather+". \nTagsüber wird es "+high+" Grad. Nachts wird es "+low+" Grad."
         return text
 
     ########################
