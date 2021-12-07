@@ -2,103 +2,90 @@
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QFont, QIcon, QKeyEvent
-from PyQt5.QtWidgets import QApplication, QPushButton, QWidget, QToolTip
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import * 
-from PyQt5.QtCore import *
-app = QApplication (sys.argv)
+from PyQt5.QtWidgets import QApplication, QPushButton, QWidget, QToolTip, QLabel, QLineEdit, QGridLayout, QComboBox
 
-#Fenster bauen 
-w = QWidget()
 
-#Fenster anzeigen_TitelSetzen
-w.show()
-w.setGeometry(50,50,1000,1000)
-w.setWindowTitle("Wetterapplikation")
-w.setWindowIcon(QIcon("wetter.png"))#Icon funktioniert noch nicht
+# w.setGeometry(50,50,1000,1000)
+
+
 
 #Button erstellen (Objektorientiert)
-class Fenster (QMainWindow): 
+class Fenster (QWidget): 
     def __init__(self):
         super().__init__()
         self.initMe()
+        self.setWindowTitle("Wetterapplikation")
+        self.setWindowIcon(QIcon("wetter.png"))#Icon funktioniert noch nicht
+        self.show()
 
     def initMe(self):
-        #Label (Text) erstellen 
-        w = QLabel(self)
-        w.setText("<b>TEXT</b>")
-        w.move(50,100)
-        w = QLabel(self)
-        w.setText("Geben Sie Ihre PLZ an")
-        w.move (50,150)
-        #Line Edit -PLZ eingeben
-        self.w =QLineEdit(self)
-        self.w.move(50,200)
+        #Layout aufsetzen
+        grid = QGridLayout()
+        self.setLayout(grid)
 
+        #Label (Text) erstellen 
+        text = QLabel(self)
+        text.setText("<b>TEXT</b>")
+        grid.addWidget(text,1,1)
+        plz_label = QLabel(self)
+        plz_label.setText("Geben Sie die gewünschte PLZ oder Ort an")
+        grid.addWidget(plz_label,2,1)
+        #Line Edit -PLZ eingeben
+        self.plz =QLineEdit(self)
+        grid.addWidget(self.plz,3,1)
+        # self.plz.adjustSize() # nötig, damit das gesamte Label angezeigt wird
+        
         #Einleitungssatz Wochentag wählen
-        w = QLabel(self)
-        w.setText("Wählen Sie den gewünschten Wochentag")
-        w.move (50,250)
-        #Wochentage aufzählen und auswählen Button 
-        Montag = QPushButton("Montag", self)
-        Montag.move(50,300)
-        Montag.clicked.connect(self.gedrueckt)
-        Dienstag = QPushButton("Dienstag", self)
-        Dienstag.move(150,300)
-        Dienstag.clicked.connect(self.gedrueckt)
-        Mittwoch = QPushButton("Mittwoch", self)
-        Mittwoch.move(250,300)
-        Mittwoch.clicked.connect(self.gedrueckt)
-        Donnerstag = QPushButton("Donnerstag", self)
-        Donnerstag.move(350,300)
-        Donnerstag.clicked.connect(self.gedrueckt)
-        Freitag = QPushButton("Freitag", self)
-        Freitag.move(450,300)
-        Freitag.clicked.connect(self.gedrueckt)
-        Samstag = QPushButton("Samstag", self)
-        Samstag.move(550,300)
-        Samstag.clicked.connect(self.gedrueckt)
-        Sonntag = QPushButton("Sonntag", self)
-        Sonntag.move(650,300)
-        Sonntag.clicked.connect(self.gedrueckt)
+        day = QLabel(self)
+        day.setText("Wählen Sie den gewünschten Wochentag")
+        grid.addWidget(day,4,1)
+        day.adjustSize()
+        self.options = QComboBox(self)
+        self.options.setObjectName("day")
+        self.options.addItem("Heute")
+        self.options.addItem("Morgen")
+        grid.addWidget(self.options,5,1)
 
         #ToolTip und Absende- Button erstellen 
         QToolTip.setFont(QFont("Arial", 8))
         senden = QPushButton("Absenden", self)
-        senden.move(50,380)
+
+        grid.addWidget(senden,6,1)
         senden.setToolTip("Drücken Sie hier, um die <b>Anfrage</b> zu versenden")
         senden.clicked.connect(self.gedrueckt)
+        senden.adjustSize()
 
         #Einleitungstext Audioaufnahme
-        w = QLabel(self)
-        w.setText("<b>AUDIO</b>")
-        w.move(50,650)
-        w = QLabel(self)
-        w.setText("Starten Sie die Aufnahme")
-        w.move (50,700)
+        label = QLabel(self)
+        label.setText("<b>AUDIO</b>")
+        grid.addWidget(label,1,2)
+        label_start = QLabel(self)
+        label_start.setText("Starten Sie die Aufnahme")
+        grid.addWidget(label_start,2,2)
 
         #Audioaufnahme 
         Audiobutton = QPushButton("Audioaufnahme starten", self)
-        Audiobutton.move(50,750)
+        grid.addWidget(Audiobutton,3,2)
         Audiobutton.pressed.connect(self.aufgenommen)
         Audiobutton.released.connect(self.abgeschickt)
 
-        Wetter = QPushButton("Audioantwort abhoeren",self)
-        Wetter.move(200,750)
-        Wetter.clicked.connect(self.abhoeren)
+        wetter = QPushButton("Audioantwort abhoeren",self)
+        grid.addWidget(wetter,4,2)
+        wetter.clicked.connect(self.abhoeren)
 
-        #Toolbar erstellen
-        self.statusBar(). showMessage("Wir zeigen Ihnen das Wetter von Heute und der nächsten 7 Tage")
+    #Brauchen wir nicht, da wir Tabs und Labels nutzen weden (GridLayout funktioniert nicht in Window sondern in Widget)
+        # #Toolbar erstellen
+        # self.statusBar(). showMessage("Wir zeigen Ihnen das Wetter von Heute und der nächsten 7 Tage")
 
-        #Menubar erstellen 
-        menubar = self.menuBar()
-        audio = menubar.addMenu("&Audioabfrage")
-        text = menubar.addMenu("&Textsuche")
+        # #Menubar erstellen 
+        # menubar = self.menuBar()
+        # audio = menubar.addMenu("&Audioabfrage")
+        # text = menubar.addMenu("&Textsuche")
 
         #Fenster anzeigen_TitelSetzen
-        self.show()
-        self.setGeometry(50,50,1000,1000)
-        self.setWindowTitle("Wetterapplikation")
+        # self.show()
+        self.setGeometry(50,50,200,200)
+        # self.setWindowTitle("Wetterapplikation")
         self.setWindowIcon(QIcon("wetter.png"))#Icon funktioniert noch nicht
 
     def gedrueckt(self, text):
@@ -120,11 +107,12 @@ class Fenster (QMainWindow):
             self.close()
 
 
-w= Fenster()
+app = QApplication (sys.argv)
+w = Fenster()
 #App beenden
 sys.exit(app.exec_())
 
-Backlog
+#Backlog
 #VERSUCH -Combobox Wochentag auswählen 
         #w = QComboBox(self)
         #w.move(80,50)
