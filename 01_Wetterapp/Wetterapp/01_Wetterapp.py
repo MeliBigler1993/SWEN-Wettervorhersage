@@ -1,15 +1,16 @@
+"""
+This module defines and sets up the GUI
+"""
 #Setting Up
 import sys
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QToolTip, QLabel, QLineEdit, QGridLayout, QComboBox, QTabWidget
 
-
-# w.setGeometry(50,50,1000,1000)
-
-
-
 #Button erstellen (Objektorientiert)
 class Fenster (QWidget):
+    """
+    initiates a window application
+    """
     def __init__(self):
         super().__init__()
         self.init_me()
@@ -19,6 +20,9 @@ class Fenster (QWidget):
         self.show()
 
     def init_me(self):
+        """
+        sets the layout. mainly adds a tab widget
+        """
         #Layout aufsetzen
         grid = QGridLayout()
         self.setLayout(grid)
@@ -28,6 +32,9 @@ class Fenster (QWidget):
         grid.addWidget(tabs,1,1)
 
 class TabWidget(QWidget):
+    """
+    initiates a Tabwidget with two tabs called "Text" and "Audio"
+    """
     def __init__(self,parent):
         super(QWidget,self).__init__(parent)
         self.layout = QVBoxLayout(self)
@@ -92,15 +99,27 @@ class TabWidget(QWidget):
         voice_output.clicked.connect(self.abhoeren)
 
     def gedrueckt(self):
+        """
+        gets called by button "Absenden". [...]
+        """
         print ("Button getätigt")
 
     def aufgenommen(self):
+        """
+        gets called by button "Aufnehmen". [...]
+        """
         print("Eine Audioaufnahme wurde hinzugefügt")
 
     def abgeschickt(self):
+        """
+        gets called by button "Aufnehmen". [...]
+        """
         print("Audioaufnahme übermittelt")
 
     def abhoeren(self):
+        """
+        gets called by button "Abhören". [...]
+        """
         print("Audioantwort abhören")
 
 
