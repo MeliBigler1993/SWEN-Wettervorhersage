@@ -74,7 +74,7 @@ class MeteoScraper:
             sys.exit()
         else:
             optlist[0].click()
-        
+
     def find_elements_by_class(self,classname):
         """
         finds and returns all elements with a certain classname.
