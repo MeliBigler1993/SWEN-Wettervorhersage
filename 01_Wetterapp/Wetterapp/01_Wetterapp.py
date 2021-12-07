@@ -2,7 +2,7 @@
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QFont, QIcon, QKeyEvent
-from PyQt5.QtWidgets import QApplication, QPushButton, QWidget, QToolTip, QLabel, QLineEdit, QGridLayout, QComboBox
+from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QToolTip, QLabel, QLineEdit, QGridLayout, QComboBox, QTabWidget
 
 
 # w.setGeometry(50,50,1000,1000)
@@ -24,54 +24,11 @@ class Fenster (QWidget):
         self.setLayout(grid)
 
         #Label (Text) erstellen 
-        text = QLabel(self)
-        text.setText("<b>TEXT</b>")
-        grid.addWidget(text,1,1)
-        plz_label = QLabel(self)
-        plz_label.setText("Geben Sie die gewünschte PLZ oder Ort an")
-        grid.addWidget(plz_label,2,1)
-        #Line Edit -PLZ eingeben
-        self.plz =QLineEdit(self)
-        grid.addWidget(self.plz,3,1)
-        # self.plz.adjustSize() # nötig, damit das gesamte Label angezeigt wird
+        tabs = TabWidget(self)
+        grid.addWidget(tabs,1,1)
+
+
         
-        #Einleitungssatz Wochentag wählen
-        day = QLabel(self)
-        day.setText("Wählen Sie den gewünschten Wochentag")
-        grid.addWidget(day,4,1)
-        day.adjustSize()
-        self.options = QComboBox(self)
-        self.options.setObjectName("day")
-        self.options.addItem("Heute")
-        self.options.addItem("Morgen")
-        grid.addWidget(self.options,5,1)
-
-        #ToolTip und Absende- Button erstellen 
-        QToolTip.setFont(QFont("Arial", 8))
-        senden = QPushButton("Absenden", self)
-
-        grid.addWidget(senden,6,1)
-        senden.setToolTip("Drücken Sie hier, um die <b>Anfrage</b> zu versenden")
-        senden.clicked.connect(self.gedrueckt)
-        senden.adjustSize()
-
-        #Einleitungstext Audioaufnahme
-        label = QLabel(self)
-        label.setText("<b>AUDIO</b>")
-        grid.addWidget(label,1,2)
-        label_start = QLabel(self)
-        label_start.setText("Starten Sie die Aufnahme")
-        grid.addWidget(label_start,2,2)
-
-        #Audioaufnahme 
-        Audiobutton = QPushButton("Audioaufnahme starten", self)
-        grid.addWidget(Audiobutton,3,2)
-        Audiobutton.pressed.connect(self.aufgenommen)
-        Audiobutton.released.connect(self.abgeschickt)
-
-        wetter = QPushButton("Audioantwort abhoeren",self)
-        grid.addWidget(wetter,4,2)
-        wetter.clicked.connect(self.abhoeren)
 
     #Brauchen wir nicht, da wir Tabs und Labels nutzen weden (GridLayout funktioniert nicht in Window sondern in Widget)
         # #Toolbar erstellen
@@ -105,6 +62,81 @@ class Fenster (QWidget):
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == Qt.Key_W:
             self.close()
+
+class TabWidget(QWidget):
+    def __init__(self,parent):
+        super(QWidget,self).__init__(parent)
+        self.layout = QVBoxLayout(self)
+
+        self.tabs = QTabWidget()
+        self.tab1 = QWidget()
+        self.tab2 = QWidget()
+        self.tabs.addTab(self.tab1, "Text")
+        self.tabs.addTab(self.tab2, "Audio")
+        self.layout.addWidget(self.tabs)
+
+        #Setup Tab1 "Text"
+        tab1_layout = QGridLayout()
+        self.tab1.setLayout(tab1_layout)
+        self.plz_label = QLabel()
+        self.plz_label.setText("Geben Sie die gewünschte PLZ oder Ort an")
+        tab1_layout.addWidget(self.plz_label,1,1)
+        #Tab 1: Line Edit -PLZ eingeben
+        self.plz =QLineEdit(self)
+        tab1_layout.addWidget(self.plz,2,1)
+
+        #Tab 1: Einleitungssatz Wochentag wählen
+        day = QLabel(self)
+        day.setText("Wählen Sie den gewünschten Wochentag")
+        tab1_layout.addWidget(day,4,1)
+        day.adjustSize()
+        self.options = QComboBox(self)
+        self.options.setObjectName("day")
+        self.options.addItem("Heute")
+        self.options.addItem("Morgen")
+        tab1_layout.addWidget(self.options,5,1)
+
+        #Tab 1: ToolTip und Absende- Button erstellen 
+        QToolTip.setFont(QFont("Arial", 12))
+        senden = QPushButton("Absenden", self)
+        tab1_layout.addWidget(senden,6,1)
+        senden.setToolTip("Drücken Sie hier, um die <b>Anfrage</b> zu versenden")
+        senden.clicked.connect(self.gedrueckt)
+
+        #Setup Tab2 "Audio"
+        tab2_layout = QGridLayout()
+        self.tab2.setLayout(tab2_layout)
+        audio_label = QLabel()
+        audio_label.setText("Starten Sie die Aufnahme")
+        tab2_layout.addWidget(audio_label,1,1)
+
+        #Tab2: Audioaufnahme
+        rec_button = QPushButton("Audioaufnahme starten", self)
+        tab2_layout.addWidget(rec_button,2,1)
+        rec_button.pressed.connect(self.aufgenommen)
+        rec_button.released.connect(self.abgeschickt)
+
+        #Tab2: Display Aufnahme
+        aufnahme = QLabel()
+        aufnahme.setText("Sie sagten: ")
+        tab2_layout.addWidget(aufnahme,3,1)
+
+        #Tab2: Antwort hören
+        voice_output = QPushButton("Audioantwort abhoeren",self)
+        tab2_layout.addWidget(voice_output,4,1)
+        voice_output.clicked.connect(self.abhoeren)
+
+    def gedrueckt(self, text):
+        print ("Button getätigt")
+    
+    def aufgenommen(self):
+        print("Eine Audioaufnahme wurde hinzugefügt")
+    
+    def abgeschickt(self):
+        print("Audioaufnahme übermittelt")
+
+    def abhoeren(self):
+        print("Audioantwort abhören")
 
 
 app = QApplication (sys.argv)
