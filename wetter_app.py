@@ -65,10 +65,6 @@ class TabWidget(QWidget):
         day.setText("Wählen Sie den gewünschten Wochentag")
         tab1_layout.addWidget(day,4,1)
         day.adjustSize()
-        self.options = QComboBox(self)
-        self.options.setObjectName("day")
-        # self.options.addItem("Heute")
-        # self.options.addItem("Morgen")
         self.setDayOptions()
         tab1_layout.addWidget(self.options,5,1)
 
@@ -106,6 +102,9 @@ class TabWidget(QWidget):
         voice_output.clicked.connect(self.abhoeren)
 
     def setDayOptions(self):
+        #add complete options generation into this function
+        self.options = QComboBox(self)
+        self.options.setObjectName("day")
         today = datetime.today()
         weekday = today.weekday()
         
@@ -119,16 +118,15 @@ class TabWidget(QWidget):
                 6: 'Sonntag',
             }
 
-        for i in range(5):
+        for i in range(6):
             if i == 0:
                 self.options.addItem("Heute")
             elif i == 1:
                 self.options.addItem("Morgen")
             else:
                 day = weekday+i
-                print(day)
                 if day > 6:
-                    day = day - 6
+                    day = day - 7
                 self.options.addItem(weekdays[day])
     
     def gedrueckt(self, plz, day):
