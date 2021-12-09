@@ -7,6 +7,7 @@ from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget, QToolTip, QLabel, QLineEdit, QGridLayout, QComboBox, QTabWidget
 from classes.meteo_scraper import MeteoScraper
 from classes.speech_rec import Speaker
+from datetime import datetime
 
 #Button erstellen (Objektorientiert)
 class Fenster (QWidget):
@@ -66,8 +67,9 @@ class TabWidget(QWidget):
         day.adjustSize()
         self.options = QComboBox(self)
         self.options.setObjectName("day")
-        self.options.addItem("Heute")
-        self.options.addItem("Morgen")
+        # self.options.addItem("Heute")
+        # self.options.addItem("Morgen")
+        self.setDayOptions()
         tab1_layout.addWidget(self.options,5,1)
 
         #Tab 1: ToolTip und Absende- Button erstellen
@@ -103,6 +105,32 @@ class TabWidget(QWidget):
         tab2_layout.addWidget(voice_output,4,1)
         voice_output.clicked.connect(self.abhoeren)
 
+    def setDayOptions(self):
+        today = datetime.today()
+        weekday = today.weekday()
+        
+        weekdays = {
+                0: 'Montag',
+                1: 'Dienstag',
+                2: 'Mittwoch',
+                3: 'Donnerstag',
+                4: 'Freitag',
+                5: 'Samstag',
+                6: 'Sonntag',
+            }
+
+        for i in range(5):
+            if i == 0:
+                self.options.addItem("Heute")
+            elif i == 1:
+                self.options.addItem("Morgen")
+            else:
+                day = weekday+i
+                print(day)
+                if day > 6:
+                    day = day - 6
+                self.options.addItem(weekdays[day])
+    
     def gedrueckt(self, plz, day):
         """
         gets called by button "Absenden". [...]
