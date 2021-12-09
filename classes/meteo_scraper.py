@@ -155,6 +155,8 @@ class MeteoScraper:
         else:
             today = int(date.today().weekday())
             weekday = today + delay
+            if weekday > 6:
+                weekday = weekday-7
             word = weekdays[weekday]
             return "am " + word
 
