@@ -20,7 +20,10 @@ Installiere die folgenden Pakete über pip:
 * Wir verwenden Version Control via GitHub 
 * Wir testen den Code via Unittesting
 
-## Implementierte Konzepte
-* Version Control
-* Unittesting
-* Clean Code
+## Weitere Entwicklungsmöglichkeiten
+* In der aktuellen Version wird in der Voice-Steuerung nur das Wetter für den heutigen Tag ausgegeben. Es müsste noch eine Funktion eingebaut werden, die es erlaubt den Tag zu nennen
+* Die Anwendung ist aktuell nur für das Nutzen auf einem Laptop oder Desktop konfiguriert. Mobile Deployment wäre ein nächster Schritt
+
+## Kontakt
+* Bei Fragen oder nicht-funktionieren des Codes kann gerne auf das Projektteam zugegangen werden
+* Die Kontaktmöglichkeiten finden sich auf den Github Profilen
