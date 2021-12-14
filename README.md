@@ -10,6 +10,9 @@ Installiere die folgenden Pakete über pip:
 * Speech Recognition `pip install SpeechRecognition`: https://pypi.org/project/SpeechRecognition/
 * Chromedriver: https://chromedriver.chromium.org/downloads
 
+Um die App zu starten muss das File "wetter_app.py" im Root-Folder gestartet werden. 
+Beispielsweise mit `python3 wetter_app.py`
+
 ## Projekt Ziele
 * User soll eine Wettervorhersage für einen von ihm/ihr bestimmten Ort und Tag erhalten
 * User soll wählen können, ob die Ein-/Ausgabe über Tastatur oder Sprache geschieht 
