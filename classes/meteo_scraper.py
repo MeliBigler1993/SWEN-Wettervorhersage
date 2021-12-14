@@ -1,7 +1,7 @@
 """
 instance of scraper configured to scrape the page www.srf.ch/meteo
 """
-# to import in another file call from .classes.meteo_scraper import ...
+# to import in another file call from .classes.meteo_scraper import MeteoScraper
 
 import sys
 from datetime import date
@@ -9,16 +9,12 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-
-
 
 class MeteoScraper:
-    #Todo @IrisAmrein change variable names to reflect their content better (e.g. day_delay, delay)
     """
     initiates a Chrome Driver configured to scrape the page www.srf.ch/meteo
 
-    :headless: boolean  - should the browser be shown | default = False
+    :headless: boolean  - should the browser be shown? | default = False
     """
     def __init__(self, headless=False):
         drivopt = webdriver.ChromeOptions()
@@ -29,7 +25,7 @@ class MeteoScraper:
     def find_weather(self,loc, day_index=0):
         """
         launch webdriver and search for weather information for plz
-        :plz: str - PLZ or Name of location to search weather for
+        :loc: str - PLZ or Name of location to search weather for
         :day_index: int - no of days from today for day that weather should be forecasted
 
         :return: str (text) - a text that describes the weather and temp at the given day
@@ -69,7 +65,7 @@ class MeteoScraper:
         optlist = self.find_elements_by_class("search-result__link")
 
         #select the first element of the searchbox dropdown if there are results, else exit script
-        if optlist == False:
+        if optlist is False:
             self.driver.quit()
             sys.exit()
         else:
@@ -159,13 +155,3 @@ class MeteoScraper:
                 weekday = weekday-7
             word = weekdays[weekday]
             return "am " + word
-
-#INFO: Wenn PyQt Ready muss alles unter dieser Linie gelöscht werden.
-
-# loc_input = input("Für welche PLZ möchtest du das Wetter wissen? ")
-# delay = input("Für wie viele Tage von heute aus?")
-
-# scraper = MeteoScraper()
-# weather_forecast = scraper.find_weather(loc_input, int(delay))
-
-# print(weather_forecast)
