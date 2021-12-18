@@ -29,4 +29,3 @@ Beispielsweise mit `python3 wetter_app.py`
 
 ## Kontakt
 * Bei Fragen oder nicht-funktionieren des Codes kann gerne auf das Projektteam zugegangen werden
-* Die Kontaktmöglichkeiten finden sich auf den Github Profilen
